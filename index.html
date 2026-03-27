@@ -56,27 +56,27 @@
     .option-card h4{margin:0; font-size:15px; color:#2e385a}
     .option-card p{margin:8px 0 0; color:var(--muted); font-size:12px; line-height:1.45}
     .helper-note{margin-top:10px;font-size:12px;color:#67729a;font-weight:700;}
+
     .panel-note{
-      background: linear-gradient(135deg, rgba(243,240,255,.92), rgba(238,245,255,.92));
-      border: 1px solid #d8ccff;
-      box-shadow: 0 10px 18px rgba(121,97,255,.08);
-      color: #3a2f7a;
-      border-radius: 18px;
-      padding: 14px 16px;
-      font-size: 13px;
-      font-weight: 800;
-      margin-bottom: 12px;
+      background: linear-gradient(135deg,#eef2ff,#f0f9ff);
+      border: 1px solid #c7d2fe;
+      border-radius:18px;
+      padding:14px 16px;
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:12px;
+      box-shadow:0 10px 18px rgba(99,102,241,.12);
     }
     .speech{
-      background: linear-gradient(135deg, #ffffff, #f6f3ff);
-      border-left: 5px solid #7961ff;
-      border-radius: 18px;
-      padding: 14px 16px;
-      color: #2e2a5a;
-      font-weight: 900;
-      line-height: 1.45;
-      font-size: 14px;
+      border:none;
+      background:transparent;
+      padding:0;
+      color:#3730a3;
+      font-weight:900;
+      line-height:1.45;
+      font-size:14px;
     }
+
     .score-panel{display:grid;gap:14px}
     .score-hero{background:radial-gradient(circle at top right, rgba(255,255,255,.35), transparent 28%),linear-gradient(135deg,#5e4ef0,#8d61ff 46%,#ff78ac);border:1px solid rgba(255,255,255,.18);border-radius:22px;padding:18px;color:#fff;box-shadow:0 16px 32px rgba(121,97,255,.22);}
     .score-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
@@ -85,15 +85,45 @@
     .score-title{margin:0;font-size:18px;font-weight:900;color:#fff;}
     .score-sub{margin:6px 0 0;font-size:13px;color:#f0ebff;line-height:1.45;}
     .score-message{margin-top:14px;background:#fff;border:1px solid rgba(255,255,255,.3);border-left:6px solid #ffb24d;border-radius:18px;padding:14px 16px;color:#2e3656;font-weight:900;line-height:1.45;box-shadow:0 10px 18px rgba(0,0,0,.08);}
-    .score-detail{background:#fff;border:1px solid #e3e8ff;border-radius:20px;padding:14px;box-shadow:0 10px 18px rgba(91,106,166,.06);}
-    .score-detail h4{margin:0 0 12px;font-size:15px;color:#2f395f;}
-    .score-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:start;padding:10px 0;border-bottom:1px dashed #e5e8f7;}
+
+    .score-detail{
+      background: linear-gradient(135deg, rgba(123,97,255,0.08), rgba(255,120,172,0.08));
+      border: 1px solid rgba(123,97,255,0.25);
+      border-radius:20px;
+      padding:14px;
+      box-shadow:0 10px 18px rgba(121,97,255,.10);
+    }
+
+    .score-detail-green{
+      background: linear-gradient(135deg, rgba(19,185,123,0.08), rgba(57,185,255,0.08));
+      border: 1px solid rgba(19,185,123,0.25);
+      border-radius:20px;
+      padding:14px;
+      box-shadow:0 10px 18px rgba(19,185,123,.10);
+    }
+
+    .score-detail h4,
+    .score-detail-green h4{margin:0 0 12px;font-size:15px;color:#2f395f;}
+
+    .score-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:start;padding:10px 0;border-bottom:1px dashed rgba(111,120,156,.28);}
     .score-line:last-child{border-bottom:none}
     .score-label{display:grid;gap:3px;}
     .score-label strong{color:#29324f;font-size:13px}
     .score-label span{color:#6b759b;font-size:12px;line-height:1.35}
     .score-value{font-weight:900;color:#27314d;font-size:13px;white-space:nowrap;padding-top:2px;}
-    .mini-tip{background:linear-gradient(135deg,#fff0ce,#ffe0a1);border:1px solid #f6cd72;color:#5c4300;border-radius:18px;padding:14px 16px;font-size:13px;font-weight:900;line-height:1.45;box-shadow:0 10px 18px rgba(255,202,99,.14);}
+
+    .mini-tip{
+      background: linear-gradient(135deg,#eef2ff,#e0e7ff);
+      border: 1px solid #c7d2fe;
+      color:#3730a3;
+      border-radius:18px;
+      padding:14px 16px;
+      font-size:13px;
+      font-weight:900;
+      line-height:1.45;
+      box-shadow:0 10px 18px rgba(99,102,241,.12);
+    }
+
     .prompt-box{background:#101427;color:#eef2ff;border-radius:20px;padding:16px;min-height:300px;white-space:pre-wrap;line-height:1.6;border:1px solid rgba(255,255,255,.08);font-size:14px;}
     .prompt-box.light{background:#f3f6ff;color:var(--text);border:1px solid #cad3f2}
     .step-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:16px}
@@ -104,6 +134,7 @@
     .btn-success{background:linear-gradient(135deg,var(--teal),#4ae0ac);color:#053b2b}
     .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#3d2a00}
     .btn-step2{background:linear-gradient(135deg,#ff7fa8,#ff926d);color:#fff}
+    .btn-copy{background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff}
     .btn-export-alt{background:linear-gradient(135deg,#f3f0ff,#e7e0ff);color:#47329e;border:1px solid #d6cbff}
     .footer{margin-top:20px;text-align:center;color:#d8ddf2;font-size:13px}
     .hidden{display:none}
@@ -121,7 +152,17 @@
     .modal-score-badge{min-width:96px;padding:12px 16px;border-radius:18px;background:linear-gradient(135deg,var(--violet),var(--violet-2));color:#fff;font-size:30px;font-weight:900;text-align:center;}
     .modal-level{display:inline-flex;padding:8px 12px;border-radius:999px;background:#e9f7ef;color:#0f7b55;font-weight:900;font-size:12px;border:1px solid #cceedd;}
     .modal-message{background:#f8faff;border:1px solid #e3e8ff;border-radius:18px;padding:14px 16px;font-size:14px;line-height:1.5;font-weight:800;color:#334063;}
-    .modal-tip{background:#fff8e7;border:1px solid #ffe5a5;color:#6f5600;border-radius:18px;padding:14px 16px;font-size:14px;line-height:1.5;font-weight:800;}
+    .modal-tip{
+      background: linear-gradient(135deg,#eef2ff,#e0e7ff);
+      border: 1px solid #c7d2fe;
+      color:#3730a3;
+      border-radius:18px;
+      padding:14px 16px;
+      font-size:14px;
+      line-height:1.5;
+      font-weight:800;
+      box-shadow:0 10px 18px rgba(99,102,241,.10);
+    }
     .modal-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;}
     .export-choice{display:grid;gap:8px;background:#f8faff;border:1px solid #e3e8ff;border-radius:18px;padding:14px;}
     .export-choice strong{color:#2f395f;font-size:14px}
@@ -228,7 +269,7 @@
               <div class="card-top step2-top"><div class="placeholder"><img src="images/card-prompt1.png" alt=""></div><div><strong>Prompt V1</strong><span>Voici ton prompt prêt à être copié.</span></div></div>
               <div class="card-body">
                 <div class="prompt-box light" id="promptBox">Le prompt V1 apparaîtra ici après génération.</div>
-                <div class="step-actions" style="justify-content:flex-start"><button class="btn btn-gold" type="button" onclick="copyPrompt('promptBox')">Copier le prompt</button></div>
+                <div class="step-actions" style="justify-content:flex-start"><button class="btn btn-copy" type="button" onclick="copyPrompt('promptBox')">Copier le prompt</button></div>
               </div>
             </section>
 
@@ -269,7 +310,7 @@
             <section class="card">
               <div class="card-top step3-top"><div class="placeholder"><img src="images/card-analyse.png" alt=""></div><div><strong>Tester, analyser, améliorer</strong><span>Teste ton prompt dans l’IA, colle la réponse obtenue, puis affine ta demande si besoin.</span></div></div>
               <div class="card-body">
-                <div class="panel-note"><div class="speech">💡 Teste ton prompt dans l’IA, copie la réponse obtenue, puis améliore ta demande si besoin.</div></div>
+                <div class="panel-note"><div class="speech">Teste ton prompt dans l’IA, copie la réponse obtenue, puis améliore ta demande si besoin.</div></div>
                 <label for="responseBox">Réponse de l’IA</label><textarea id="responseBox" placeholder="Colle ici la réponse de l’IA."></textarea>
                 <label for="needAnswer">Qu’est-ce qui t’aide dans la réponse ?</label>
                 <select id="needAnswer">
@@ -311,14 +352,14 @@
                     <div style="margin-top:12px"><span class="level-badge" id="scoreLevelV2">À compléter</span></div>
                     <div class="score-message" id="scoreMessageV2">Complète l’étape 3 pour voir ta progression.</div>
                   </div>
-                  <div class="score-detail">
+                  <div class="score-detail-green">
                     <h4>Comparaison V1 → V2</h4>
                     <div class="score-line"><div class="score-label"><strong>Score V1</strong><span>Ton premier score avant amélioration.</span></div><div class="score-value" id="compareV1">0 / 8</div></div>
                     <div class="score-line"><div class="score-label"><strong>Bonus de progression</strong><span>Points gagnés grâce à l’analyse et au V2.</span></div><div class="score-value" id="compareBonus">+0</div></div>
                     <div class="score-line"><div class="score-label"><strong>Score final V2</strong><span>Ton score après amélioration.</span></div><div class="score-value" id="compareV2">0 / 10</div></div>
                   </div>
                 </div>
-                <div class="step-actions" style="justify-content:flex-start"><button class="btn btn-gold" type="button" onclick="copyPrompt('promptBoxV2')">Copier le prompt</button></div>
+                <div class="step-actions" style="justify-content:flex-start"><button class="btn btn-copy" type="button" onclick="copyPrompt('promptBoxV2')">Copier le prompt</button></div>
               </div>
             </section>
           </div>
@@ -446,6 +487,19 @@
       if (!t) return false;
       if (isVeryVague(t)) return false;
       return t.length < 20;
+    }
+
+    function hasAnyInputForV1(){
+      const textFields = [
+        get("niveau"),
+        get("matiere"),
+        get("notion"),
+        get("travail"),
+        get("enonce"),
+        get("comprends"),
+        get("blocage")
+      ];
+      return textFields.some(v => v.length > 0) || !!selectedHelp || selectedConstraints.length > 0;
     }
 
     function getContextScore(){
@@ -639,6 +693,11 @@ Comment je veux être aidé : ${selectedConstraints.length ? selectedConstraints
     }
 
     function generatePromptV1(){
+      if (!hasAnyInputForV1()) {
+        alert("Tu n’as rien renseigné. Ce n’est pas pertinent d’avancer sans écrire ta demande.");
+        return;
+      }
+
       buildPrompt();
       renderScoreV1();
       goStep(22);
