@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Structurer sa demande avant d’interroger l’IA</title>
+  <style>
+    :root{
+      --bg1:#16122f;
+      --bg2:#2a2054;
+      --bg3:#211848;
+      --surface:rgba(255,255,255,.95);
+      --surface-2:rgba(248,250,255,.99);
+      --line:#d7def8;
+      --line-soft:rgba(146,161,213,.22);
+      --text:#232a43;
+      --muted:#6f789c;
+      --violet:#7961ff;
+      --violet-2:#9d87ff;
+      --violet-3:#5e4ef0;
+      --pink:#ff78ac;
+      --teal:#14c8a0;
+      --teal-2:#39b9ff;
+      --success:#13b97b;
+      --gold:#ffca63;
+      --gold-2:#ffd98a;
+      --shadow:0 22px 50px rgba(0,0,0,.22);
+      --shadow-soft:0 16px 32px rgba(43,55,111,.10);
+      --shadow-card:0 18px 40px rgba(58,78,146,.10);
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+
+    body{
+      font-family:"Segoe UI","Aptos","Helvetica Neue",Arial,sans-serif;
+      color:#fff;
+      min-height:100vh;
+      text-rendering:auto;
+      -webkit-font-smoothing:auto;
+      -moz-osx-font-smoothing:auto;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(164,126,255,.24), transparent 17%),
+        radial-gradient(circle at 82% 18%, rgba(255,154,105,.16), transparent 19%),
+        radial-gradient(circle at 80% 80%, rgba(56,184,255,.15), transparent 18%),
+        linear-gradient(135deg,var(--bg1),var(--bg2) 50%,var(--bg3));
+    }
+
+    .page-bg{
+      position:fixed;
+      inset:0;
+      background-image:url("images/fond-atelier-prompt-ia.png");
+      background-size:cover;
+      background-position:center;
+      opacity:.34;
+      mix-blend-mode:screen;
+      pointer-events:none;
+      filter:saturate(1.05);
+    }
+
+    .shell{
+      position:relative;
+      max-width:1360px;
+      margin:0 auto;
+      padding:18px;
+    }
+
+    .hero{
+      position:relative;
+      border-radius:30px;
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+        linear-gradient(135deg, rgba(66,55,123,.46), rgba(74,61,134,.34));
+      box-shadow:0 28px 60px rgba(0,0,0,.22);
+      backdrop-filter:blur(16px);
+      padding:20px 22px 18px;
+      margin-bottom:18px;
+      text-align:center;
+      overflow:hidden;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:auto -12% -60% auto;
+      width:320px;
+      height:320px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,.16), transparent 62%);
+      pointer-events:none;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.16);
+      font-weight:800;
+      font-size:12px;
+      color:#eef1ff;
+      margin-bottom:10px;
+      letter-spacing:.02em;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(26px,3.3vw,42px);
+      line-height:1.03;
+      letter-spacing:-.035em;
+      max-width:860px;
+      margin-inline:auto;
+      font-weight:900;
+    }
+
+    .hero-sub{
+      margin:10px auto 0;
+      max-width:820px;
+      color:#e2e6fb;
+      font-size:15px;
+      line-height:1.5;
+      font-weight:500;
+    }
+
+    .hero-bottom{
+      margin-top:16px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .progress-meta{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    .progress-label{
+      font-size:13px;
+      font-weight:900;
+      color:#fff;
+      background:rgba(255,255,255,.14);
+      padding:9px 13px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.10);
+    }
+
+    .progress-bar{
+      width:260px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.14);
+      overflow:hidden;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+    }
+
+    .progress-bar span{
+      display:block;
+      width:33.33%;
+      height:100%;
+      background:linear-gradient(90deg,#efeaff,#b49bff 45%,#8f7dff);
+      box-shadow:0 0 12px rgba(143,125,255,.55);
+      transition:width .2s ease;
+    }
+
+    .export-btn{
+      border:none;
+      cursor:pointer;
+      padding:12px 18px;
+      border-radius:16px;
+      background:linear-gradient(135deg,var(--violet),var(--violet-2));
+      color:#fff;
+      font-weight:900;
+      font-size:14px;
+      box-shadow:0 12px 24px rgba(121,97,255,.28);
+      transition:.18s ease;
+      font-family:inherit;
+    }
+
+    .export-btn:hover{transform:translateY(-1px)}
+
+    .workspace{
+      border-radius:30px;
+      border:1px solid rgba(255,255,255,.35);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.96), rgba(248,250,255,.94));
+      box-shadow:0 26px 60px rgba(17,23,59,.16);
+      padding:20px;
+      color:var(--text);
+      backdrop-filter:blur(8px);
+    }
+
+    .workspace-head{
+      display:flex;
+      align-items:flex-start;
+      gap:14px;
+      margin-bottom:16px;
+      flex-wrap:wrap;
+    }
+
+    .workspace-visual{
+      width:60px;
+      height:60px;
+      border-radius:20px;
+      background:#eef2ff;
+      border:1px solid #dce3ff;
+      overflow:hidden;
+      flex:0 0 60px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .workspace-visual img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .workspace-head h2{
+      margin:0;
+      font-size:32px;
+      line-height:1.08;
+      letter-spacing:-.03em;
+      font-weight:900;
+      color:#27314d;
+    }
+
+    .workspace-head p{
+      margin:5px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.55;
+      max-width:900px;
+      font-weight:500;
+    }
+
+    .triptych{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; align-items:stretch}
+    .duo{display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:stretch}
+
+    .card{
+      display:flex;
+      flex-direction:column;
+      background:linear-gradient(180deg,#f8faff 0%, #f1f5ff 100%);
+      border:1px solid #cfd9ff;
+      border-radius:28px;
+      overflow:hidden;
+      box-shadow:0 18px 40px rgba(41,56,117,.12);
+      min-height:100%;
+    }
+
+    .step1-top{background:linear-gradient(135deg,#6f68ff,#4f83ff)}
+    .step2-top{background:linear-gradient(135deg,#ff7fa8,#ff926d)}
+    .step3-top{background:linear-gradient(135deg,#20c8a6,#39b9ff)}
+
+    .card-top{
+      min-height:92px;
+      padding:15px 16px;
+      color:#fff;
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .card-top::after{
+      content:"";
+      position:absolute;
+      right:-30px;
+      top:-26px;
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,.16), transparent 68%);
+      pointer-events:none;
+    }
+
+    .placeholder{
+      width:54px;
+      height:54px;
+      border-radius:18px;
+      background:rgba(255,255,255,.20);
+      border:1px solid rgba(255,255,255,.26);
+      overflow:hidden;
+      flex:0 0 54px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.14);
+    }
+
+    .placeholder img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .card-top strong{
+      display:block;
+      font-size:20px;
+      font-weight:900;
+      line-height:1.05;
+      letter-spacing:-.02em;
+    }
+
+    .card-top span{
+      display:block;
+      font-size:13px;
+      line-height:1.45;
+      opacity:.96;
+      margin-top:4px;
+      font-weight:500;
+    }
+
+    .card-body{
+      padding:14px 16px 16px;
+      display:flex;
+      flex-direction:column;
+      flex:1;
+    }
+
+    label{
+      display:block;
+      font-size:14px;
+      font-weight:800;
+      color:#2a3557;
+      margin:10px 0 6px;
+      letter-spacing:-.02em;
+    }
+
+    input[type="text"], textarea, select{
+      width:100%;
+      border:1px solid #cad3f2;
+      background:#f5f7ff;
+      color:var(--text);
+      border-radius:16px;
+      padding:13px 14px;
+      font-size:15px;
+      font-family:inherit;
+      outline:none;
+      transition:.18s ease;
+    }
+
+    textarea{min-height:110px; resize:vertical}
+
+    input:focus,textarea:focus,select:focus{
+      border-color:#a996ff;
+      background:#fbfbff;
+      box-shadow:0 0 0 4px rgba(124,92,255,.12);
+    }
+
+    .field-tip{
+      margin-top:7px;
+      color:#6b759b;
+      font-size:12px;
+      line-height:1.4;
+      font-weight:600;
+    }
+
+    .option-stack{display:grid; gap:10px}
+
+    .option-card{
+      background:linear-gradient(180deg,#f2f5ff,#edf2ff);
+      border:1px solid #cad3f2;
+      border-radius:20px;
+      padding:14px;
+      cursor:pointer;
+      transition:.15s ease;
+      min-height:92px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      box-shadow:0 6px 14px rgba(85,100,160,.05);
+    }
+
+    .option-card:hover{transform:translateY(-1px)}
+    .option-card.active{
+      border-color:#8f7dff;
+      box-shadow:0 0 0 4px rgba(124,92,255,.12), 0 12px 22px rgba(124,92,255,.12);
+      background:linear-gradient(180deg,#fbf8ff,#f5f0ff);
+    }
+
+    .option-card h4{margin:0; font-size:15px; color:#2e385a; font-weight:800;}
+    .option-card p{margin:8px 0 0; color:var(--muted); font-size:12px; line-height:1.45}
+    .helper-note{margin-top:10px;font-size:12px;color:#67729a;font-weight:700;}
+
+    .note-layout{
+      display:grid;
+      grid-template-columns:52px 1fr;
+      gap:14px;
+      align-items:center;
+    }
+
+    .note-icon-box{
+      width:52px;
+      height:52px;
+      border-radius:16px;
+      background:rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.24);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.18);
+      flex:0 0 52px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .note-icon-box img{
+      width:30px;
+      height:30px;
+      object-fit:contain;
+      display:block;
+      filter:drop-shadow(0 3px 8px rgba(0,0,0,.16));
+      z-index:2;
+    }
+
+    .note-icon-fallback{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      width:30px;
+      height:30px;
+      font-size:22px;
+      line-height:1;
+      z-index:1;
+    }
+
+    .score-panel{display:grid;gap:18px;}
+
+    .score-hero{
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.26), transparent 28%),
+        linear-gradient(135deg,#5e4ef0 0%, #7b61ff 44%, #ff78ac 100%);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:28px;
+      padding:18px;
+      color:#fff;
+      box-shadow:0 20px 40px rgba(121,97,255,.24);
+    }
+
+    .green-hero{
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.24), transparent 28%),
+        linear-gradient(135deg,#12b981 0%, #1cc8ae 46%, #39b9ff 100%);
+      box-shadow:0 20px 40px rgba(24,184,154,.22);
+    }
+
+    .score-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .score-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:112px;
+      padding:14px 18px;
+      border-radius:20px;
+      font-size:31px;
+      font-weight:900;
+      color:#2f225f;
+      background:linear-gradient(135deg,#fffaf2,#ffeccf);
+      box-shadow:0 12px 24px rgba(0,0,0,.12);
+      border:1px solid rgba(255,255,255,.68);
+    }
+
+    .level-badge{
+      display:inline-flex;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.18);
+      color:#fff;
+      font-size:12px;
+      font-weight:900;
+      border:1px solid rgba(255,255,255,.26);
+      backdrop-filter:blur(4px);
+    }
+
+    .score-title{margin:0;font-size:18px;font-weight:900;color:#fff;letter-spacing:-.02em;}
+    .score-sub{margin:6px 0 0;font-size:13px;color:#f0ebff;line-height:1.48;font-weight:500;}
+
+    .score-message{
+      margin-top:14px;
+      background:#fff;
+      border:1px solid rgba(255,255,255,.30);
+      border-left:6px solid #ffb24d;
+      border-radius:18px;
+      padding:14px 16px;
+      color:#2e3656;
+      font-weight:900;
+      line-height:1.45;
+      box-shadow:0 10px 18px rgba(0,0,0,.08);
+    }
+
+    .score-overlay-card{
+      margin-top:16px;
+      background:#ffffff;
+      border:1px solid rgba(214,223,252,.95);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:
+        0 14px 28px rgba(31,42,82,.10),
+        inset 0 1px 0 rgba(255,255,255,.92);
+    }
+
+    .score-detail,.score-detail-green{background:transparent;border:none;border-radius:0;padding:0;box-shadow:none;}
+    .score-detail h4,.score-detail-green h4{margin:0 0 14px;font-size:17px;font-weight:900;color:#24314e;letter-spacing:-.02em;}
+
+    .score-line{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:12px;
+      align-items:start;
+      padding:13px 0;
+      border-bottom:1px dashed rgba(74,89,145,.20);
+    }
+
+    .score-line:last-child{border-bottom:none}
+    .score-label{display:grid;gap:3px;}
+    .score-label strong{color:#22304f;font-size:14px;font-weight:900;}
+    .score-label span{color:#69779f;font-size:13px;line-height:1.35}
+    .score-value{font-weight:900;color:#1e2a49;font-size:14px;white-space:nowrap;padding-top:2px;}
+
+    .mini-tip{
+      background:linear-gradient(135deg,#4338ca 0%, #6366f1 55%, #8b5cf6 100%);
+      border:1px solid rgba(255,255,255,.18);
+      color:#fff;
+      border-radius:22px;
+      padding:16px 18px;
+      box-shadow:0 18px 34px rgba(79,70,229,.28);
+    }
+
+    .mini-tip .mini-tip-text{color:#fff;font-size:14px;font-weight:800;line-height:1.5;}
+
+    .prompt-box{
+      background:linear-gradient(180deg,#0d1430 0%, #0a1027 100%);
+      color:#eef2ff;
+      border-radius:24px;
+      padding:18px;
+      min-height:300px;
+      white-space:pre-wrap;
+      line-height:1.65;
+      border:1px solid rgba(255,255,255,.08);
+      font-size:14px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+    }
+
+    .prompt-box.light{background:linear-gradient(180deg,#f8faff 0%, #eef3ff 100%);color:#25304f;border:1px solid #d6defc;}
+
+    .step-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:16px}
+
+    .btn{
+      border:none;
+      border-radius:16px;
+      padding:13px 16px;
+      font-weight:900;
+      font-size:14px;
+      cursor:pointer;
+      transition:.16s ease;
+      box-shadow:0 10px 18px rgba(45,59,112,.08);
+      font-family:inherit;
+    }
+
+    .btn:hover{transform:translateY(-1px)}
+
+    .btn-primary{background:linear-gradient(135deg,var(--violet),var(--violet-2));color:#fff}
+    .btn-secondary{background:#eef2ff;color:#2a3350;border:1px solid var(--line)}
+    .btn-success{background:linear-gradient(135deg,var(--teal),#4ae0ac);color:#053b2b}
+    .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#3d2a00}
+    .btn-step2{background:linear-gradient(135deg,#ff7fa8,#ff926d);color:#fff}
+    .btn-copy{background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff}
+    .btn-export-alt{background:linear-gradient(135deg,#f3f0ff,#e7e0ff);color:#47329e;border:1px solid #d6cbff}
+
+    .footer{margin-top:20px;text-align:center;color:#d8ddf2;font-size:13px}
+    .hidden{display:none}
+
+    .toast{
+      position:fixed;
+      right:20px;
+      bottom:20px;
+      z-index:1200;
+      background:#1f2540;
+      color:#fff;
+      padding:12px 14px;
+      border-radius:14px;
+      box-shadow:0 22px 50px rgba(0,0,0,.22);
+      font-size:13px;
+      font-weight:800;
+      max-width:320px;
+      opacity:0;
+      transform:translateY(10px);
+      pointer-events:none;
+      transition:.2s ease;
+    }
+
+    .toast.show{opacity:1;transform:translateY(0)}
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(12,16,36,.55);
+      backdrop-filter:blur(4px);
+      z-index:1500;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+
+    .modal.open{display:flex}
+
+    .modal-card,.export-modal-card{
+      width:min(700px,100%);
+      background:#fff;
+      color:#232a43;
+      border-radius:30px;
+      box-shadow:0 24px 60px rgba(0,0,0,.24);
+      border:1px solid #e5e8fb;
+      overflow:hidden;
+    }
+
+    .export-modal-card{width:min(560px,100%)}
+
+    .modal-head,.export-head{
+      padding:22px 22px 14px;
+      background:linear-gradient(135deg,#f3f0ff,#eef5ff);
+      border-bottom:1px solid #e5e8fb;
+    }
+
+    .modal-head h3,.export-head h3{
+      margin:0;
+      font-size:26px;
+      color:#29324f;
+      line-height:1.08;
+      letter-spacing:-.02em;
+      font-weight:900;
+    }
+
+    .modal-head p,.export-head p{margin:8px 0 0;color:#67729a;font-size:14px;line-height:1.45;font-weight:500;}
+    .modal-body,.export-body{padding:18px 22px 22px;display:grid;gap:14px;}
+    .modal-score{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+
+    .modal-score-badge{
+      min-width:96px;
+      padding:12px 16px;
+      border-radius:18px;
+      background:linear-gradient(135deg,var(--violet),var(--violet-2));
+      color:#fff;
+      font-size:30px;
+      font-weight:900;
+      text-align:center;
+    }
+
+    .modal-level{
+      display:inline-flex;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#e9f7ef;
+      color:#0f7b55;
+      font-weight:900;
+      font-size:12px;
+      border:1px solid #cceedd;
+    }
+
+    .modal-message{
+      background:#f8faff;
+      border:1px solid #e3e8ff;
+      border-radius:18px;
+      padding:14px 16px;
+      font-size:14px;
+      line-height:1.5;
+      font-weight:800;
+      color:#334063;
+    }
+
+    .modal-tip{
+      background:linear-gradient(135deg,#4338ca 0%, #6366f1 55%, #8b5cf6 100%);
+      border:1px solid rgba(255,255,255,.16);
+      color:#fff;
+      border-radius:22px;
+      padding:16px 18px;
+      box-shadow:0 16px 30px rgba(79,70,229,.22);
+    }
+
+    .modal-tip .modal-tip-text{color:#fff;font-size:14px;line-height:1.5;font-weight:800;}
+    .modal-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;}
+
+    .export-choice{
+      display:grid;
+      gap:8px;
+      background:#f8faff;
+      border:1px solid #e3e8ff;
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .export-choice strong{color:#2f395f;font-size:14px;font-weight:900;}
+    .export-choice span{color:#6b759b;font-size:13px;line-height:1.4}
+
+    @media (max-width:1120px){
+      .triptych,.duo{grid-template-columns:1fr}
+    }
+
+    @media (max-width:820px){
+      .hero-bottom{flex-direction:column}
+      .progress-bar{width:100%}
+      .shell{padding:14px}
+      .hero{padding:16px 14px 14px}
+      .workspace{padding:16px}
+      .score-top{align-items:flex-start}
+      .note-layout{grid-template-columns:42px 1fr;gap:10px}
+      .note-icon-box{width:42px;height:42px;border-radius:13px}
+      .note-icon-box img{width:22px;height:22px}
+      .note-icon-fallback{width:22px;height:22px;font-size:18px}
+    }
+  </style>
+</head>
+<body>
+  <div class="page-bg"></div>
+  <div class="shell">
+    <main>
+      <section class="hero">
+        <div class="badge">Atelier Prompt</div>
+        <h1>Structurer sa demande avant d’interroger l’IA</h1>
+        <p class="hero-sub">L’objectif n’est pas juste de remplir des cases. L’objectif est de formuler une demande claire, utile et assez précise pour obtenir une aide qui fait vraiment progresser.</p>
+        <div class="hero-bottom">
+          <div class="progress-meta">
+            <div class="progress-label" id="stepMeta">1 / 3</div>
+            <div class="progress-bar"><span id="progressBar"></span></div>
+          </div>
+          <button class="export-btn" type="button" onclick="openExportModal()">Exporter</button>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <div class="workspace-head">
+          <div class="workspace-visual"><img id="stageVisual" src="images/step-1.png" alt="Illustration d'étape"></div>
+          <div>
+            <h2 id="stageTitle">Étape 1 · Clarifier ta demande</h2>
+            <p id="stageSubtitle">Commence par dire ce que tu fais, ce que tu veux apprendre et où ça bloque vraiment. Une bonne demande part d’un vrai besoin, avec une idée claire de ce que tu veux améliorer.</p>
+          </div>
+        </div>
+
+        <div id="screen1">
+          <div class="triptych">
+            <section class="card">
+              <div class="card-top step1-top"><div class="placeholder"><img src="images/card-context.png" alt=""></div><div><strong>Situer le travail</strong><span>Donne juste le cadre utile. Pas besoin d’en faire des tonnes.</span></div></div>
+              <div class="card-body">
+                <label for="niveau">Classe / niveau</label><input id="niveau" type="text" placeholder="Ex. 3e, 2de, 1re, terminale, BTS…" />
+                <div class="field-tip">Ça permet d’éviter une réponse trop simple… ou hors programme.</div>
+                <label for="matiere">Matière</label><input id="matiere" type="text" placeholder="Ex. maths, français, histoire-géo, sciences…" />
+                <label for="notion">Notion / chapitre</label><input id="notion" type="text" placeholder="Ex. notion, chapitre, thème, compétence travaillée…" />
+                <div class="field-tip">Plus la notion est précise, plus l’aide sera utile.</div>
+              </div>
+            </section>
+            <section class="card">
+              <div class="card-top step1-top"><div class="placeholder"><img src="images/card-work.png" alt=""></div><div><strong>Dire ce que tu veux</strong><span>Formule le vrai objectif, pas juste “j’ai un exercice”.</span></div></div>
+              <div class="card-body">
+                <label for="travail">Ce que tu veux travailler</label><input id="travail" type="text" placeholder="Ex. comprendre une méthode, m'entraîner, vérifier un raisonnement…" />
+                <div class="field-tip">Le but ici, c’est de montrer ce que tu veux travailler pour gagner en compétence.</div>
+                <label for="enonce">Énoncé / consigne</label><textarea id="enonce" placeholder="Colle ici la consigne, la question ou l’extrait utile."></textarea>
+              </div>
+            </section>
+            <section class="card">
+              <div class="card-top step1-top"><div class="placeholder"><img src="images/card-understand.png" alt=""></div><div><strong>Cibler le blocage</strong><span>C’est là que la demande devient vraiment exploitable.</span></div></div>
+              <div class="card-body">
+                <label for="comprends">Ce que tu as déjà compris</label><textarea id="comprends" placeholder="Explique brièvement ce que tu sais déjà faire ou ce que tu as déjà compris."></textarea>
+                <label for="blocage">Ce qui bloque vraiment</label><textarea id="blocage" placeholder="Explique précisément à quel moment ça bloque ou ce que tu n’arrives pas encore à faire seul."></textarea>
+                <div class="field-tip">Ne dis pas juste “je comprends pas”. Dis précisément à quel moment tu décroches.</div>
+              </div>
+            </section>
+          </div>
+          <div class="step-actions">
+            <button class="btn btn-secondary" type="button" onclick="resetAll()">Réinitialiser</button>
+            <button class="btn btn-primary" type="button" onclick="goStep(2)">Étape 2</button>
+          </div>
+        </div>
+
+        <div id="screen2" class="hidden">
+          <div class="duo">
+            <section class="card">
+              <div class="card-top step2-top"><div class="placeholder"><img src="images/card-help.png" alt=""></div><div><strong>Choisir le type d’aide</strong><span>Une seule direction claire vaut mieux qu’un fourre-tout.</span></div></div>
+              <div class="card-body">
+                <div class="option-stack" id="helpGrid">
+                  <div class="option-card" data-help="Comprendre une notion" onclick="selectHelp(this)"><h4>Comprendre une notion</h4><p>Tu veux surtout qu’on t’explique pour que ça devienne plus clair.</p></div>
+                  <div class="option-card" data-help="Apprendre une méthode" onclick="selectHelp(this)"><h4>Apprendre une méthode</h4><p>Tu veux qu’on te montre comment faire étape par étape.</p></div>
+                  <div class="option-card" data-help="S’entraîner" onclick="selectHelp(this)"><h4>S’entraîner</h4><p>Tu veux un exemple proche pour t’exercer sans être perdu.</p></div>
+                  <div class="option-card" data-help="Vérifier" onclick="selectHelp(this)"><h4>Vérifier</h4><p>Tu veux confronter ton raisonnement et repérer ce qui cloche.</p></div>
+                </div>
+                <div class="helper-note">Choisis une seule carte. Oui, une seule. Sinon ça brouille la demande.</div>
+              </div>
+            </section>
+            <section class="card">
+              <div class="card-top step2-top"><div class="placeholder"><img src="images/card-guide.png" alt=""></div><div><strong>Mieux cadrer la réponse</strong><span>Ajoute seulement les contraintes qui servent vraiment.</span></div></div>
+              <div class="card-body">
+                <div class="option-stack" id="constraintGrid">
+                  <div class="option-card" data-constraint="Adapte ta réponse à mon niveau scolaire" onclick="toggleConstraint(this)"><h4>Adapter au niveau scolaire</h4><p>Pour rester dans ce qui a réellement été vu en classe.</p></div>
+                  <div class="option-card" data-constraint="Explique de façon claire et simple" onclick="toggleConstraint(this)"><h4>Expliquer clairement</h4><p>Pour éviter le jargon et les réponses qui embrouillent.</p></div>
+                  <div class="option-card" data-constraint="Explique avec des étapes" onclick="toggleConstraint(this)"><h4>Détailler les étapes</h4><p>Pour voir comment avancer sans sauter des morceaux.</p></div>
+                  <div class="option-card" data-constraint="Donne la réponse en expliquant comment faire" onclick="toggleConstraint(this)"><h4>Donner la réponse en expliquant</h4><p>Utile si tu veux un modèle complet à analyser.</p></div>
+                  <div class="option-card" data-constraint="Explique sans donner directement la réponse" onclick="toggleConstraint(this)"><h4>Guider sans faire à ma place</h4><p>Utile si tu veux rester acteur du travail.</p></div>
+                  <div class="option-card" data-constraint="Ajoute un exemple ou un schéma si possible" onclick="toggleConstraint(this)"><h4>Ajouter un exemple ou un schéma</h4><p>Pour rendre la notion plus concrète et plus visuelle.</p></div>
+                </div>
+                <div class="helper-note" id="constraintHelper">Tu peux choisir jusqu’à 3 cartes. Pas plus, sinon la demande part dans tous les sens.</div>
+              </div>
+            </section>
+          </div>
+          <div class="step-actions">
+            <button class="btn btn-secondary" type="button" onclick="goStep(1)">Retour</button>
+            <button class="btn btn-step2" type="button" onclick="generatePromptV1()">Générer le prompt</button>
+          </div>
+        </div>
+
+        <div id="screen22" class="hidden">
+          <div class="duo">
+            <section class="card">
+              <div class="card-top step2-top"><div class="placeholder"><img src="images/card-prompt1.png" alt=""></div><div><strong>Prompt V1</strong><span>Cette version est prête à être testée dans l’IA.</span></div></div>
+              <div class="card-body">
+                <div class="prompt-box light" id="promptBox">Le prompt V1 apparaîtra ici après génération.</div>
+                <div class="step-actions" style="justify-content:flex-start"><button class="btn btn-copy" type="button" onclick="copyPrompt('promptBox')">Copier le prompt</button></div>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-top step2-top"><div class="placeholder"><img src="images/card-review.png" alt=""></div><div><strong>Mon score IA</strong><span>Le score sert à repérer ce qui manque encore, pas à faire joli.</span></div></div>
+              <div class="card-body">
+                <div class="score-panel">
+                  <div class="score-hero">
+                    <div class="score-top">
+                      <div><p class="score-title">Score du prompt V1</p><p class="score-sub">Ce score mesure si ta demande est assez précise pour que l’IA puisse t’aider correctement.</p></div>
+                      <div class="score-badge" id="scoreValue">0 / 8</div>
+                    </div>
+                    <div style="margin-top:12px"><span class="level-badge" id="scoreLevel">À compléter</span></div>
+                    <div class="score-message" id="scoreMessage">Complète les différentes zones pour obtenir un premier score.</div>
+
+                    <div class="score-overlay-card">
+                      <div class="score-detail">
+                        <h4>Détail du score</h4>
+                        <div class="score-line"><div class="score-label"><strong>Cadre</strong><span>Niveau, matière, notion.</span></div><div class="score-value" id="detailContext">0 / 2</div></div>
+                        <div class="score-line"><div class="score-label"><strong>Objectif</strong><span>Ce que tu veux vraiment travailler.</span></div><div class="score-value" id="detailWork">0 / 2</div></div>
+                        <div class="score-line"><div class="score-label"><strong>Blocage</strong><span>Ce que tu sais déjà et l’endroit où ça coince.</span></div><div class="score-value" id="detailNeed">0 / 2</div></div>
+                        <div class="score-line"><div class="score-label"><strong>Cohérence</strong><span>Aide choisie + contraintes utiles.</span></div><div class="score-value" id="detailCoherence">0 / 2</div></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mini-tip" id="step2Tip">
+                    <div class="note-layout">
+                      <div class="note-icon-box">
+                        <img src="images/icon-important.png" alt="Important" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <span class="note-icon-fallback">⚠</span>
+                      </div>
+                      <div class="mini-tip-text">Le vrai gain se fait à l’étape 3 : tu testes, tu regardes ce qui manque, puis tu reformules pour gagner en compétence.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="step-actions">
+            <button class="btn btn-secondary" type="button" onclick="goStep(2)">Retour</button>
+            <button class="btn btn-primary" type="button" onclick="goStep(3)">Passer à l’étape 3</button>
+          </div>
+        </div>
+
+        <div id="screen3" class="hidden">
+          <div class="duo">
+            <section class="card">
+              <div class="card-top step3-top"><div class="placeholder"><img src="images/card-analyse.png" alt=""></div><div><strong>Tester, analyser, améliorer</strong><span>On ne s’arrête pas au premier jet. On teste, on regarde ce qui manque, puis on améliore.</span></div></div>
+              <div class="card-body">
+                <label for="responseBox">Réponse de l’IA</label><textarea id="responseBox" placeholder="Colle ici la réponse obtenue."></textarea>
+                <label for="needAnswer">Qu’est-ce qui t’aide dans la réponse ?</label>
+                <select id="needAnswer">
+                  <option value="">Choisir…</option>
+                  <option>La réponse répond bien à mon besoin</option>
+                  <option>La réponse m’aide seulement en partie</option>
+                  <option>La réponse ne m’aide pas assez</option>
+                </select>
+                <label for="levelAnswer">Le niveau est-il adapté ?</label>
+                <select id="levelAnswer">
+                  <option value="">Choisir…</option>
+                  <option>Trop simple</option>
+                  <option>Adapté</option>
+                  <option>Trop compliqué</option>
+                </select>
+                <label for="placeAnswer">L’IA t’a-t-elle aidé ou a-t-elle fait à ta place ?</label>
+                <select id="placeAnswer">
+                  <option value="">Choisir…</option>
+                  <option>Elle m’aide à comprendre</option>
+                  <option>Elle mélange aide et réponse</option>
+                  <option>Elle fait trop à ma place</option>
+                </select>
+                <label for="changePrompt">Qu’est-ce qu’il faut changer pour améliorer le prompt ?</label>
+                <textarea id="changePrompt" placeholder="Ex. préciser le niveau, dire que je n’ai pas vu telle méthode, demander plus d’étapes ou moins de jargon."></textarea>
+                <div class="step-actions" style="justify-content:flex-start"><button class="btn btn-success" type="button" onclick="buildPromptV2()">Générer le prompt V2</button></div>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-top step3-top"><div class="placeholder"><img src="images/card-prompt2.png" alt=""></div><div><strong>Prompt V2</strong><span>Voici la version retravaillée de ta demande.</span></div></div>
+              <div class="card-body">
+                <div class="prompt-box" id="promptBoxV2">Le prompt V2 apparaîtra ici après analyse.</div>
+                <div class="score-panel" style="margin-top:14px">
+                  <div class="score-hero green-hero">
+                    <div class="score-top">
+                      <div><p class="score-title">Progression après amélioration</p><p class="score-sub">Le second score montre si ton prompt est devenu plus précis, plus utile et plus efficace pour te faire gagner en compétence.</p></div>
+                      <div class="score-badge" id="scoreValueV2">0 / 10</div>
+                    </div>
+                    <div style="margin-top:12px"><span class="level-badge" id="scoreLevelV2">À compléter</span></div>
+                    <div class="score-message" id="scoreMessageV2">Complète l’étape 3 pour voir ta progression.</div>
+
+                    <div class="score-overlay-card">
+                      <div class="score-detail-green">
+                        <h4>Comparaison V1 → V2</h4>
+                        <div class="score-line"><div class="score-label"><strong>Score V1</strong><span>Ton premier score avant amélioration.</span></div><div class="score-value" id="compareV1">0 / 8</div></div>
+                        <div class="score-line"><div class="score-label"><strong>Bonus de progression</strong><span>Points gagnés grâce à l’analyse du retour et à la reformulation.</span></div><div class="score-value" id="compareBonus">+0</div></div>
+                        <div class="score-line"><div class="score-label"><strong>Score final V2</strong><span>Ton score après amélioration.</span></div><div class="score-value" id="compareV2">0 / 10</div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="step-actions" style="justify-content:flex-start"><button class="btn btn-copy" type="button" onclick="copyPrompt('promptBoxV2')">Copier le prompt</button></div>
+              </div>
+            </section>
+          </div>
+          <div class="step-actions"><button class="btn btn-secondary" type="button" onclick="goStep(22)">Précédent</button></div>
+        </div>
+      </section>
+      <div class="footer">Amany BARAX • innovation pédagogique</div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="modal" id="scoreModal">
+    <div class="modal-card">
+      <div class="modal-head"><h3>Ton prompt V1 est prêt 🎉</h3><p>Tu as une première version exploitable. Maintenant, le plus important, c’est de la tester puis de l’améliorer.</p></div>
+      <div class="modal-body">
+        <div class="modal-score"><div class="modal-score-badge" id="modalScoreValue">0 / 8</div><div><div class="modal-level" id="modalScoreLevel">À compléter</div></div></div>
+        <div class="modal-message" id="modalScoreMessage">Complète les différentes zones pour obtenir un premier score.</div>
+        <div class="modal-tip">
+          <div class="note-layout">
+            <div class="note-icon-box">
+              <img src="images/icon-important.png" alt="Important" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <span class="note-icon-fallback">⚠</span>
+            </div>
+            <div class="modal-tip-text">Un prompt correct, c’est bien. Un prompt retravaillé après test, c’est nettement mieux.</div>
+          </div>
+        </div>
+        <div class="modal-actions"><button class="btn btn-primary" type="button" onclick="closeScoreModal()">Continuer</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="scoreModalV2">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Ton prompt V2 est prêt 🚀</h3>
+        <p>Tu as retravaillé ta demande à partir d’un vrai retour. C’est là que tu commences vraiment à transformer ta demande en outil de progression.</p>
+      </div>
+      <div class="modal-body">
+        <div class="modal-score">
+          <div class="modal-score-badge" id="modalScoreValueV2">0 / 10</div>
+          <div><div class="modal-level" id="modalScoreLevelV2">À compléter</div></div>
+        </div>
+        <div class="modal-message" id="modalScoreMessageV2">Complète l’étape 3 pour voir ta progression.</div>
+        <div class="modal-tip">
+          <div class="note-layout">
+            <div class="note-icon-box">
+              <img src="images/icon-important.png" alt="Important" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <span class="note-icon-fallback">⚠</span>
+            </div>
+            <div class="modal-tip-text" id="modalBonusText">Bonus de progression : +0 point.</div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-primary" type="button" onclick="closeScoreModalV2()">Voir mon prompt amélioré</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="exportModal">
+    <div class="export-modal-card">
+      <div class="export-head"><h3>Exporter les résultats</h3><p>Choisis le format qui te convient pour récupérer le travail de l’élève.</p></div>
+      <div class="export-body">
+        <div class="export-choice"><strong>JSON</strong><span>Format structuré utile pour une analyse détaillée.</span><button class="btn btn-export-alt" type="button" onclick="downloadJSON()">Télécharger en JSON</button></div>
+        <div class="export-choice"><strong>CSV UTF-8</strong><span>Format pratique pour tableur et tri rapide des réponses.</span><button class="btn btn-export-alt" type="button" onclick="downloadCSV()">Télécharger en CSV</button></div>
+        <div class="export-choice"><strong>Rapport lisible</strong><span>Version mise en page pour relire facilement le travail de l’élève.</span><button class="btn btn-export-alt" type="button" onclick="downloadReport()">Télécharger le rapport</button></div>
+        <div class="modal-actions"><button class="btn btn-secondary" type="button" onclick="closeExportModal()">Fermer</button></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    let selectedHelp = "";
+    let selectedConstraints = [];
+    let currentScoreV1 = 0;
+    let currentScoreV2 = 0;
+    let currentBonus = 0;
+
+    function openExportModal(){ document.getElementById("exportModal").classList.add("open"); }
+    function closeExportModal(){ document.getElementById("exportModal").classList.remove("open"); }
+
+    function showToast(message){
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+    function stageImageFor(step){
+      const img = document.getElementById("stageVisual");
+      if(!img) return;
+      const map = {1:"images/step-1.png",2:"images/step-2.png",22:"images/step-2.png",3:"images/step-3.png"};
+      img.src = map[step] || "images/step-1.png";
+    }
+
+    function goStep(n) {
+      document.getElementById("screen1").classList.toggle("hidden", n !== 1);
+      document.getElementById("screen2").classList.toggle("hidden", n !== 2);
+      document.getElementById("screen22").classList.toggle("hidden", n !== 22);
+      document.getElementById("screen3").classList.toggle("hidden", n !== 3);
+
+      const visibleStep = (n === 1) ? 1 : (n === 2 || n === 22) ? 2 : 3;
+      document.getElementById("stepMeta").textContent = `${visibleStep} / 3`;
+      document.getElementById("progressBar").style.width = visibleStep === 1 ? "33.33%" : visibleStep === 2 ? "66.66%" : "100%";
+
+      const title = document.getElementById("stageTitle");
+      const subtitle = document.getElementById("stageSubtitle");
+      if (n === 1) {
+        title.textContent = "Étape 1 · Clarifier ta demande";
+        subtitle.textContent = "Commence par dire ce que tu fais, ce que tu vises et où ça coince vraiment. Une bonne demande part d’un vrai besoin, pas d’une phrase floue.";
+      }
+      if (n === 2) {
+        title.textContent = "Étape 2 · Préparer la demande";
+        subtitle.textContent = "Choisis l’aide utile et ajoute seulement les contraintes qui cadrent vraiment la réponse.";
+      }
+      if (n === 22) {
+        title.textContent = "Étape 2 · Ton prompt est prêt";
+        subtitle.textContent = "Voici une première version exploitable. Elle est faite pour être testée, puis améliorée.";
+      }
+      if (n === 3) {
+        title.textContent = "Étape 3 · Tester, analyser, améliorer";
+        subtitle.textContent = "Teste ton prompt, regarde ce qui manque dans la réponse, puis reformule plus intelligemment.";
+      }
+      stageImageFor(n);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function get(id) {
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : "";
+    }
+
+    function normalizeText(text) {
+      return (text || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[’']/g, "'")
+        .replace(/\s+/g, " ");
+    }
+
+    function isPlaceholder(text){
+      const t = normalizeText(text);
+      return !t || t === "[à préciser]" || t === "[notion]" || t === "[travail]";
+    }
+
+    function isVeryVague(text){
+      const t = normalizeText(text);
+      const vagueValues = [
+        "aide moi","aide-moi","je sais pas","j sais pas","je ne sais pas","tout","rien",
+        "je comprends pas","je ne comprends pas","j'ai du mal","j ai du mal","ça bloque","ca bloque","je bloque",
+        "fonction","exo","exercice"
+      ];
+      return !t || t.length < 8 || vagueValues.includes(t);
+    }
+
+    function isMediumVague(text){
+      const t = normalizeText(text);
+      if (!t) return false;
+      if (isVeryVague(t)) return false;
+      return t.length < 20;
+    }
+
+    function hasAnyInputForV1(){
+      const textFields = [
+        get("niveau"),
+        get("matiere"),
+        get("notion"),
+        get("travail"),
+        get("enonce"),
+        get("comprends"),
+        get("blocage")
+      ];
+      return textFields.some(v => v.length > 0) || !!selectedHelp || selectedConstraints.length > 0;
+    }
+
+    function getContextScore(){
+      const niveau = normalizeText(get("niveau"));
+      const matiere = normalizeText(get("matiere"));
+      const notion = normalizeText(get("notion"));
+      const filled = [niveau, matiere, notion].filter(v => v && !isPlaceholder(v)).length;
+      if (filled <= 1) return 0;
+      if (filled === 2) return 1;
+      if (isVeryVague(notion) || notion.length < 5) return 1;
+      return 2;
+    }
+
+    function getWorkScore(){
+      const travail = normalizeText(get("travail"));
+      const enonce = normalizeText(get("enonce"));
+      if (isPlaceholder(travail) && isPlaceholder(enonce)) return 0;
+      if (isVeryVague(travail)) return 0;
+      if ((!isPlaceholder(travail) && isMediumVague(travail)) || (!isPlaceholder(travail) && isPlaceholder(enonce))) return 1;
+      if (!isPlaceholder(travail) && !isPlaceholder(enonce)) return 2;
+      return 1;
+    }
+
+    function getNeedScore(){
+      const comprends = normalizeText(get("comprends"));
+      const blocage = normalizeText(get("blocage"));
+      if (isPlaceholder(comprends) && isPlaceholder(blocage)) return 0;
+      if (isVeryVague(blocage)) return 0;
+      if (isMediumVague(blocage)) return 1;
+      const preciseMarkers = ["je ne comprends pas comment","je bloque sur","à l'étape","a l'etape","quand","pourquoi","comment","je n'arrive pas","je n arrive pas"];
+      const hasPrecision = preciseMarkers.some(m => blocage.includes(m)) || blocage.length >= 30;
+      if (hasPrecision && !isPlaceholder(comprends)) return 2;
+      return 1;
+    }
+
+    function getCoherenceScore(){
+      if (!selectedHelp) return 0;
+      let score = 2;
+      const travail = normalizeText(get("travail"));
+      const blocage = normalizeText(get("blocage"));
+      const enonce = normalizeText(get("enonce"));
+
+      if (selectedConstraints.length === 0) score = 1;
+      if (selectedConstraints.length > 3) score = 0;
+
+      if (selectedHelp === "Vérifier") {
+        const hasMaterialToCheck =
+          !isPlaceholder(enonce) ||
+          travail.includes("corrig") ||
+          travail.includes("vérif") ||
+          travail.includes("verif") ||
+          travail.includes("raisonnement") ||
+          blocage.length >= 20;
+        if (!hasMaterialToCheck) score = 0;
+      }
+
+      if (
+        (selectedHelp === "Comprendre une notion" || selectedHelp === "Apprendre une méthode") &&
+        selectedConstraints.includes("Donne la réponse en expliquant comment faire")
+      ) {
+        score = Math.min(score, 1);
+      }
+
+      if (
+        selectedConstraints.includes("Donne la réponse en expliquant comment faire") &&
+        selectedConstraints.includes("Explique sans donner directement la réponse")
+      ) {
+        score = 0;
+      }
+
+      if (
+        selectedHelp === "S’entraîner" &&
+        !selectedConstraints.includes("Ajoute un exemple ou un schéma si possible")
+      ) {
+        score = Math.min(score, 1);
+      }
+
+      return score;
+    }
+
+    function getDominantMessage(contextScore, workScore, needScore, coherenceScore){
+      if (workScore === 0) return "Ta demande reste trop floue. Dis clairement ce que tu veux travailler au lieu de rester sur quelque chose de vague.";
+      if (needScore === 0) return "Ton blocage n’est pas assez précis. Dis exactement à quel moment tu coinces.";
+      if (contextScore === 0) return "Le cadre manque. Ajoute au minimum le niveau, la matière et la notion.";
+      if (coherenceScore === 0) return "Tes choix ne vont pas ensemble. Reprends le type d’aide et les contraintes choisies.";
+      if (coherenceScore === 1) return "Le prompt tient debout, mais certains choix peuvent encore être mieux ajustés.";
+      return "Ton prompt est clair et bien cadré. Il pourra encore gagner en précision après test.";
+    }
+
+    function getLevel(score){
+      if(score <= 2) return { label: "Flou", colorBg:"#ffe4e4", colorText:"#a52f2f", border:"#ffc6c6" };
+      if(score <= 4) return { label: "En cours", colorBg:"#fff1d6", colorText:"#8a5a00", border:"#ffe2a0" };
+      if(score <= 6) return { label: "Pertinent", colorBg:"#e8f2ff", colorText:"#2353a6", border:"#cfe2ff" };
+      return { label: "Expert", colorBg:"#e9f7ef", colorText:"#0f7b55", border:"#cceedd" };
+    }
+
+    function scorePromptV1(){
+      const contextScore = getContextScore();
+      const workScore = getWorkScore();
+      const needScore = getNeedScore();
+      const coherenceScore = getCoherenceScore();
+
+      let total = contextScore + workScore + needScore + coherenceScore;
+      if (needScore === 0) total = Math.min(total, 4);
+      if (workScore === 0) total = Math.min(total, 4);
+      if (workScore === 0 && needScore === 0) total = Math.min(total, 2);
+
+      const message = getDominantMessage(contextScore, workScore, needScore, coherenceScore);
+      const level = getLevel(total);
+      currentScoreV1 = total;
+
+      return {
+        total,
+        level,
+        message,
+        details:{context:contextScore, work:workScore, need:needScore, coherence:coherenceScore}
+      };
+    }
+
+    function renderScoreV1(){
+      const score = scorePromptV1();
+      document.getElementById("scoreValue").textContent = `${score.total} / 8`;
+      document.getElementById("scoreMessage").textContent = score.message;
+      document.getElementById("detailContext").textContent = `${score.details.context} / 2`;
+      document.getElementById("detailWork").textContent = `${score.details.work} / 2`;
+      document.getElementById("detailNeed").textContent = `${score.details.need} / 2`;
+      document.getElementById("detailCoherence").textContent = `${score.details.coherence} / 2`;
+
+      const levelEl = document.getElementById("scoreLevel");
+      levelEl.textContent = score.level.label;
+      levelEl.style.background = score.level.colorBg;
+      levelEl.style.color = score.level.colorText;
+      levelEl.style.borderColor = score.level.border;
+
+      document.getElementById("modalScoreValue").textContent = `${score.total} / 8`;
+      document.getElementById("modalScoreMessage").textContent = score.message;
+
+      const modalLevelEl = document.getElementById("modalScoreLevel");
+      modalLevelEl.textContent = score.level.label;
+      modalLevelEl.style.background = score.level.colorBg;
+      modalLevelEl.style.color = score.level.colorText;
+      modalLevelEl.style.borderColor = score.level.border;
+    }
+
+    function renderScoreV2Modal(message, level){
+      document.getElementById("modalScoreValueV2").textContent = `${currentScoreV2} / 10`;
+      document.getElementById("modalScoreMessageV2").textContent = message;
+      document.getElementById("modalBonusText").textContent = `Bonus de progression : +${currentBonus} point${currentBonus > 1 ? "s" : ""}.`;
+
+      const modalLevelEl = document.getElementById("modalScoreLevelV2");
+      modalLevelEl.textContent = currentScoreV2 >= 9 ? "Expert" : currentScoreV2 >= 7 ? "Pertinent" : currentScoreV2 >= 5 ? "En cours" : "Flou";
+      modalLevelEl.style.background = level.colorBg;
+      modalLevelEl.style.color = level.colorText;
+      modalLevelEl.style.borderColor = level.border;
+    }
+
+    function openScoreModal(){ document.getElementById("scoreModal").classList.add("open"); }
+    function closeScoreModal(){ document.getElementById("scoreModal").classList.remove("open"); }
+    function openScoreModalV2(){ document.getElementById("scoreModalV2").classList.add("open"); }
+    function closeScoreModalV2(){ document.getElementById("scoreModalV2").classList.remove("open"); }
+
+    function maybeCelebrate(score){
+      if(score >= 6 && typeof confetti === "function"){
+        confetti({ particleCount: 120, spread: 72, origin:{ y:0.62 } });
+      }
+    }
+
+    function selectHelp(el) {
+      document.querySelectorAll("#helpGrid .option-card").forEach(card => card.classList.remove("active"));
+      el.classList.add("active");
+      selectedHelp = el.dataset.help || "";
+    }
+
+    function toggleConstraint(el) {
+      const value = el.dataset.constraint || "";
+      if (!el.classList.contains("active") && selectedConstraints.length >= 3) {
+        showToast("Tu peux choisir jusqu’à 3 contraintes maximum.");
+        return;
+      }
+      el.classList.toggle("active");
+      if (el.classList.contains("active")) {
+        if (!selectedConstraints.includes(value)) selectedConstraints.push(value);
+      } else {
+        selectedConstraints = selectedConstraints.filter(v => v !== value);
+      }
+      document.getElementById("constraintHelper").textContent = `Tu as choisi ${selectedConstraints.length} contrainte${selectedConstraints.length > 1 ? "s" : ""} sur 3 maximum.`;
+    }
+
+    function buildNaturalPrompt(){
+      const sections = [];
+      const contextParts = [get("niveau"), get("matiere"), get("notion")].filter(Boolean);
+      if (contextParts.length) sections.push(`Contexte : ${contextParts.join(" · ")}`);
+      if (get("travail")) sections.push(`Je veux surtout travailler : ${get("travail")}`);
+      if (get("enonce")) sections.push(`Consigne ou extrait utile :\n${get("enonce")}`);
+      if (get("comprends")) sections.push(`Ce que j’ai déjà compris :\n${get("comprends")}`);
+      if (get("blocage")) sections.push(`Là où ça bloque vraiment :\n${get("blocage")}`);
+      if (selectedHelp) sections.push(`Type d’aide attendu : ${selectedHelp}`);
+      if (selectedConstraints.length) sections.push(`Pour m’aider, je veux que tu : ${selectedConstraints.join(" ; ")}.`);
+      sections.push("Réponds en tenant compte de ces éléments pour m’aider à progresser et à gagner en compétence, sans t’éloigner de mon besoin.");
+      return sections.join("\n\n");
+    }
+
+    function generatePromptV1(){
+      if (!hasAnyInputForV1()) {
+        alert("Tu n’as rien renseigné. Avancer sans contenu n’aurait aucun intérêt.");
+        return;
+      }
+
+      document.getElementById("promptBox").textContent = buildNaturalPrompt();
+      renderScoreV1();
+      goStep(22);
+      openScoreModal();
+      maybeCelebrate(currentScoreV1);
+    }
+
+    function getProgressBonus(){
+      const response = get("responseBox");
+      const needAnswer = get("needAnswer");
+      const levelAnswer = get("levelAnswer");
+      const placeAnswer = get("placeAnswer");
+      const changePrompt = get("changePrompt");
+      let bonus = 0;
+      if(response.length > 30 && changePrompt.length > 20) bonus += 1;
+      if(needAnswer && levelAnswer && placeAnswer && changePrompt.length > 20) bonus += 1;
+      return Math.min(2, bonus);
+    }
+
+    function getImprovementMessage(finalScore){
+      if(get("changePrompt").length < 10) return "Tu as généré un V2, mais l’amélioration reste trop légère pour être vraiment visible.";
+      if(finalScore <= currentScoreV1) return "Le V2 reformule un peu, mais il reste encore trop proche du V1.";
+      if(finalScore <= 6) return "Tu as commencé à améliorer ton prompt. Il faut encore mieux cibler ton besoin.";
+      if(finalScore <= 8) return "Tu as mieux cadré ta demande. La réponse attendue devient plus claire.";
+      return "L’amélioration est nette. Ton prompt est plus précis, plus utile et mieux piloté.";
+    }
+
+    function buildPromptV2() {
+      const sections = [];
+      const contextParts = [get("niveau"), get("matiere"), get("notion")].filter(Boolean);
+      if (contextParts.length) sections.push(`Contexte : ${contextParts.join(" · ")}`);
+      if (get("travail")) sections.push(`Je veux surtout travailler : ${get("travail")}`);
+      if (get("enonce")) sections.push(`Consigne ou extrait utile :\n${get("enonce")}`);
+      if (get("comprends")) sections.push(`Ce que j’ai déjà compris :\n${get("comprends")}`);
+      if (get("blocage")) sections.push(`Là où ça bloque vraiment :\n${get("blocage")}`);
+      if (selectedHelp) sections.push(`Type d’aide attendu : ${selectedHelp}`);
+      if (selectedConstraints.length) sections.push(`Pour m’aider, je veux que tu : ${selectedConstraints.join(" ; ")}.`);
+
+      const feedback = [];
+      if (get("needAnswer")) feedback.push(`Ce qui m’aide dans la réponse : ${get("needAnswer")}`);
+      if (get("levelAnswer")) feedback.push(`Niveau de la réponse : ${get("levelAnswer")}`);
+      if (get("placeAnswer")) feedback.push(`Place prise par l’IA : ${get("placeAnswer")}`);
+      if (get("changePrompt")) feedback.push(`Ce qu’il faut changer pour améliorer la demande : ${get("changePrompt")}`);
+
+      if (feedback.length) {
+        sections.push(`Retour sur la première réponse :\n- ${feedback.join("\n- ")}`);
+      }
+
+      sections.push("Reprends ta réponse en tenant compte de ces ajustements pour mieux m’aider à progresser et à gagner en compétence, sans repartir sur quelque chose de trop général.");
+
+      document.getElementById("promptBoxV2").textContent = sections.join("\n\n");
+      currentBonus = getProgressBonus();
+      currentScoreV2 = Math.min(10, currentScoreV1 + currentBonus);
+
+      const level = getLevel(Math.min(8, currentScoreV2));
+      const message = getImprovementMessage(currentScoreV2);
+
+      document.getElementById("scoreValueV2").textContent = `${currentScoreV2} / 10`;
+      document.getElementById("scoreMessageV2").textContent = message;
+      document.getElementById("compareV1").textContent = `${currentScoreV1} / 8`;
+      document.getElementById("compareBonus").textContent = `+${currentBonus}`;
+      document.getElementById("compareV2").textContent = `${currentScoreV2} / 10`;
+
+      const levelEl = document.getElementById("scoreLevelV2");
+      levelEl.textContent = currentScoreV2 >= 9 ? "Expert" : currentScoreV2 >= 7 ? "Pertinent" : currentScoreV2 >= 5 ? "En cours" : "Flou";
+      levelEl.style.background = level.colorBg;
+      levelEl.style.color = level.colorText;
+      levelEl.style.borderColor = level.border;
+
+      renderScoreV2Modal(message, level);
+      openScoreModalV2();
+
+      if(currentBonus >= 1 && typeof confetti === "function"){
+        confetti({ particleCount: 160, spread: 88, origin:{ y:0.62 } });
+      }
+    }
+
+    async function copyPrompt(id) {
+      const el = document.getElementById(id);
+      const text = el ? el.textContent : "";
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast(id === "promptBox" ? "Prompt V1 copié. Tu peux maintenant le tester dans l’IA." : "Prompt V2 copié.");
+      } catch (e) {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        showToast("Prompt copié.");
+      }
+    }
+
+    function collectData() {
+      return {
+        niveau: get("niveau"),
+        matiere: get("matiere"),
+        notion: get("notion"),
+        travail: get("travail"),
+        enonce: get("enonce"),
+        compris: get("comprends"),
+        blocage: get("blocage"),
+        type_aide: selectedHelp,
+        comment_aider: selectedConstraints,
+        score_v1: currentScoreV1,
+        bonus_progression: currentBonus,
+        score_v2: currentScoreV2,
+        prompt_v1: document.getElementById("promptBox").textContent,
+        reponse_ia: get("responseBox"),
+        besoin_reponse: get("needAnswer"),
+        niveau_reponse: get("levelAnswer"),
+        aide_ou_substitution: get("placeAnswer"),
+        changement_prompt: get("changePrompt"),
+        prompt_v2: document.getElementById("promptBoxV2").textContent
+      };
+    }
+
+    function safeDownload(blob, filename){
+      const a = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+        a.remove();
+      }, 0);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function downloadJSON() {
+      try{
+        const blob = new Blob([JSON.stringify(collectData(), null, 2)], { type: "application/json;charset=utf-8" });
+        safeDownload(blob, "atelier_prompt_ia.json");
+        closeExportModal();
+        showToast("Export JSON téléchargé.");
+      } catch(e){ showToast("L’export JSON a échoué."); }
+    }
+
+    function csvEscape(v) {
+      const s = (Array.isArray(v) ? v.join(" | ") : (v ?? "")).toString().replace(/"/g, '""').replace(/\n/g, " ");
+      return `"${s}"`;
+    }
+
+    function downloadCSV() {
+      try{
+        const data = collectData();
+        const headers = Object.keys(data).join(";");
+        const row = Object.values(data).map(csvEscape).join(";");
+        const csv = "\ufeff" + headers + "\n" + row;
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+        safeDownload(blob, "atelier_prompt_ia.csv");
+        closeExportModal();
+        showToast("Export CSV téléchargé.");
+      } catch(e){ showToast("L’export CSV a échoué."); }
+    }
+
+    function downloadReport() {
+      try{
+        const d = collectData();
+        const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Rapport Atelier Prompt IA</title><style>body{font-family:"Segoe UI",Arial,sans-serif;background:#f6f7fb;color:#1f2438;margin:0;padding:32px}.wrap{max-width:1100px;margin:auto}.card{background:#fff;border:1px solid #dfe4ff;border-radius:22px;padding:20px;margin-top:18px}.grid{display:grid;grid-template-columns:220px 1fr;gap:12px}.k{font-weight:800;color:#46507b}pre{white-space:pre-wrap;background:#f7f8ff;border:1px solid #dfe4ff;padding:16px;border-radius:18px}@media(max-width:900px){.grid{grid-template-columns:1fr}}</style></head><body><div class="wrap"><h1>Rapport Atelier Prompt IA</h1><div class="card"><div class="grid"><div class="k">Niveau</div><div>${escapeHtml(d.niveau || 'Non renseigné')}</div><div class="k">Matière</div><div>${escapeHtml(d.matiere || 'Non renseigné')}</div><div class="k">Notion</div><div>${escapeHtml(d.notion || 'Non renseigné')}</div><div class="k">Travail</div><div>${escapeHtml(d.travail || 'Non renseigné')}</div><div class="k">Énoncé</div><div>${escapeHtml(d.enonce || 'Non renseigné')}</div><div class="k">Compris</div><div>${escapeHtml(d.compris || 'Non renseigné')}</div><div class="k">Blocage</div><div>${escapeHtml(d.blocage || 'Non renseigné')}</div><div class="k">Type d’aide</div><div>${escapeHtml(d.type_aide || 'Non renseigné')}</div><div class="k">Comment aider</div><div>${escapeHtml(Array.isArray(d.comment_aider) ? d.comment_aider.join(' | ') : 'Non renseigné')}</div><div class="k">Score V1</div><div>${escapeHtml((d.score_v1 || 0) + ' / 8')}</div><div class="k">Bonus progression</div><div>${escapeHtml('+' + (d.bonus_progression || 0))}</div><div class="k">Score V2</div><div>${escapeHtml((d.score_v2 || 0) + ' / 10')}</div></div></div><div class="card"><h2>Prompt V1</h2><pre>${escapeHtml(d.prompt_v1 || 'Non renseigné')}</pre></div><div class="card"><h2>Réponse IA</h2><pre>${escapeHtml(d.reponse_ia || 'Non renseigné')}</pre></div><div class="card"><h2>Prompt V2</h2><pre>${escapeHtml(d.prompt_v2 || 'Non renseigné')}</pre></div></div></body></html>`;
+        const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+        safeDownload(blob, "atelier_prompt_ia_rapport.html");
+        closeExportModal();
+        showToast("Rapport téléchargé.");
+      } catch(e){ showToast("L’export du rapport a échoué."); }
+    }
+
+    function resetAll() {
+      ["niveau","matiere","notion","travail","enonce","comprends","blocage","responseBox","needAnswer","levelAnswer","placeAnswer","changePrompt"].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.tagName === "SELECT") el.selectedIndex = 0;
+        else el.value = "";
+      });
+      selectedHelp = "";
+      selectedConstraints = [];
+      currentScoreV1 = 0;
+      currentScoreV2 = 0;
+      currentBonus = 0;
+      document.querySelectorAll(".option-card").forEach(c => c.classList.remove("active"));
+      document.getElementById("constraintHelper").textContent = "Tu peux choisir jusqu’à 3 cartes. Pas plus, sinon la demande part dans tous les sens.";
+      document.getElementById("promptBox").textContent = "Le prompt V1 apparaîtra ici après génération.";
+      document.getElementById("promptBoxV2").textContent = "Le prompt V2 apparaîtra ici après analyse.";
+      document.getElementById("scoreValue").textContent = "0 / 8";
+      document.getElementById("scoreLevel").textContent = "À compléter";
+      document.getElementById("scoreMessage").textContent = "Complète les différentes zones pour obtenir un premier score.";
+      document.getElementById("detailContext").textContent = "0 / 2";
+      document.getElementById("detailWork").textContent = "0 / 2";
+      document.getElementById("detailNeed").textContent = "0 / 2";
+      document.getElementById("detailCoherence").textContent = "0 / 2";
+      document.getElementById("scoreValueV2").textContent = "0 / 10";
+      document.getElementById("scoreLevelV2").textContent = "À compléter";
+      document.getElementById("scoreMessageV2").textContent = "Complète l’étape 3 pour voir ta progression.";
+      document.getElementById("compareV1").textContent = "0 / 8";
+      document.getElementById("compareBonus").textContent = "+0";
+      document.getElementById("compareV2").textContent = "0 / 10";
+      document.getElementById("modalScoreValueV2").textContent = "0 / 10";
+      document.getElementById("modalScoreLevelV2").textContent = "À compléter";
+      document.getElementById("modalScoreMessageV2").textContent = "Complète l’étape 3 pour voir ta progression.";
+      document.getElementById("modalBonusText").textContent = "Bonus de progression : +0 point.";
+      closeScoreModal();
+      closeScoreModalV2();
+      closeExportModal();
+      goStep(1);
+    }
+
+    window.addEventListener("DOMContentLoaded", () => { goStep(1); });
+  </script>
+</body>
+</html>
